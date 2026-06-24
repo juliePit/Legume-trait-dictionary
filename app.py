@@ -46,6 +46,12 @@ category_filter = st.sidebar.selectbox(
     ["All"] + sorted(df["Class"].dropna().unique().tolist())
 )
 
+species_filter = st.sidebar.selectbox(
+    "Species",
+    ["All"] + species_cols
+)
+
+
 # -----------------------------
 # APPLY FILTERS
 # -----------------------------
@@ -61,6 +67,12 @@ if search:
 if category_filter != "All":
     filtered_df = filtered_df[
         filtered_df["Class"] == category_filter
+    ]
+
+# ✅ NEW: Species filter
+if species_filter != "All":
+    filtered_df = filtered_df[
+        filtered_df[species_filter].notna()
     ]
 
 # -----------------------------
@@ -173,3 +185,4 @@ for trait, group in grouped:
                 with st.expander("Show variable names"):
                     for v in var_names:
                         st.write(f"- {v}")
+
