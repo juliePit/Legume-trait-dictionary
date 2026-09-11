@@ -176,14 +176,50 @@ for trait, group in grouped:
             # ---------------------
             # SCALES
             # ---------------------
-            scales = mgroup["Scale name"].dropna().unique()
 
-            if len(scales) > 0:
-                st.write("**Available scales:**")
-                for s in scales:
-                    st.write(f"- {s}")
-            else:
-                st.write("No scale specified")
+st.write("**Scales**")
+
+for _, row in mgroup.iterrows():
+
+    scale_name = row.get("Scale name", "")
+    scale_class = row.get("scale class", "")
+
+    if pd.notna(scale_name):
+        st.write(f"**{scale_name}** ({scale_class})")
+
+
+    # ---------------------
+# SCALE LEVELS
+# ---------------------
+scale_class = mgroup["scale class"].iloc[0]
+
+if scale_class in ["Ordinal", "Nominal"]:
+
+    st.write("**Scale levels**")
+
+    levels = []
+
+    for _, row in mgroup.iterrows():
+
+        for i in range(1, 21):  # adjust maximum level number if needed
+
+            code_col = f"Level {i} code"
+            label_col = f"Level {i} label"
+
+            if code_col in row.index and label_col in row.index:
+
+                code = row[code_col]
+                label = row[label_col]
+
+                if pd.notna(code) or pd.notna(label):
+                    levels.append((str(code), str(label)))
+
+    # remove duplicates
+    levels = list(dict.fromkeys(levels))
+
+    if levels:
+        for code, label in levels:
+            st.write(f"**{code}** : {label}")
 
             # ---------------------
             # VARIABLES
