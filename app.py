@@ -211,8 +211,8 @@ for trait, group in grouped:
         
                     for i in range(1, 10):
         
-                        code_col = f"Level {i} code"
-                        label_col = f"Level {i} label"
+                        code_col = f""Label Cat {i}""
+                        label_col = f""Category {i}""
         
                         if (
                             pd.notna(row.get(code_col))
