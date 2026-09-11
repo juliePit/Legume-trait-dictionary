@@ -184,6 +184,32 @@ for trait, group in grouped:
                     st.write(f"- {s}")
             else:
                 st.write("No scale specified")
+                if not scale_class.empty and scale_class.iloc[0] in ["Ordinal", "Nominal"]:
+
+    scale_rows = []
+
+    row = mgroup.iloc[0]
+
+    for i in range(1, 10):
+        code_col = f"Level {i} code"
+        label_col = f"Level {i} label"
+
+        if (
+            pd.notna(row.get(code_col))
+            and pd.notna(row.get(label_col))
+        ):
+            scale_rows.append({
+                "Code": row[code_col],
+                "Meaning": row[label_col]
+            })
+
+    if scale_rows:
+        st.write("**Scale details**")
+        st.dataframe(
+            pd.DataFrame(scale_rows),
+            hide_index=True,
+            use_container_width=True
+        )
 
             # ---------------------
             # VARIABLES
