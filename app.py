@@ -155,78 +155,92 @@ for trait, group in grouped:
     if forage_present:
         st.info("Forage: " + ", ".join(forage_present))
 
-    # -------------------------
-    # METHODS
-    # -------------------------
-    st.subheader("Methods")
+# -------------------------
+# METHODS
+# -------------------------
+st.subheader("Methods")
 
-    method_groups = group.groupby("Method name")
+method_groups = group.groupby("Method name")
 
-    for method, mgroup in method_groups:
+for method, mgroup in method_groups:
 
-        with st.expander(f"📘 {method}"):
+    with st.expander(f"📘 {method}"):
 
-            # Method description
-            m_desc_series = mgroup["Method description"].dropna()
-            m_description = m_desc_series.iloc[0] if not m_desc_series.empty else "No description available."
+        # Method description
+        m_desc_series = mgroup["Method description"].dropna()
+        m_description = (
+            m_desc_series.iloc[0]
+            if not m_desc_series.empty
+            else "No description available."
+        )
 
-            st.write("**Description**")
-            st.write(m_description)
+        st.write("**Description**")
+        st.write(m_description)
 
-            # ---------------------
-            # SCALES
-            # ---------------------
+        # ---------------------
+        # SCALES
+        # ---------------------
+        st.write("**Scales**")
 
-st.write("**Scales**")
+        for _, row in mgroup.iterrows():
 
-for _, row in mgroup.iterrows():
+            scale_name = row.get("Scale name", "")
+            scale_class = row.get("scale class", "")
 
-    scale_name = row.get("Scale name", "")
-    scale_class = row.get("scale class", "")
+            if pd.notna(scale_name):
+                st.write(f"**{scale_name}** ({scale_class})")
 
-    if pd.notna(scale_name):
-        st.write(f"**{scale_name}** ({scale_class})")
+        # ---------------------
+        # SCALE LEVELS
+        # ---------------------
+        scale_class = mgroup["scale class"].iloc[0]
 
+        if scale_class in ["Ordinal", "Nominal"]:
 
-    # ---------------------
-# SCALE LEVELS
-# ---------------------
-scale_class = mgroup["scale class"].iloc[0]
+            levels = []
 
-if scale_class in ["Ordinal", "Nominal"]:
+            for _, row in mgroup.iterrows():
 
-    st.write("**Scale levels**")
+                for i in range(1, 21):
 
-    levels = []
+                    code_col = f"Level {i} code"
+                    label_col = f"Level {i} label"
 
-    for _, row in mgroup.iterrows():
+                    if (
+                        code_col in mgroup.columns
+                        and label_col in mgroup.columns
+                    ):
 
-        for i in range(1, 21):  # adjust maximum level number if needed
+                        code = row[code_col]
+                        label = row[label_col]
 
-            code_col = f"Level {i} code"
-            label_col = f"Level {i} label"
+                        if pd.notna(code) and pd.notna(label):
+                            levels.append((str(code), str(label)))
 
-            if code_col in row.index and label_col in row.index:
+            levels = list(dict.fromkeys(levels))
 
-                code = row[code_col]
-                label = row[label_col]
+            if levels:
 
-                if pd.notna(code) or pd.notna(label):
-                    levels.append((str(code), str(label)))
+                st.write("**Scale levels**")
 
-    # remove duplicates
-    levels = list(dict.fromkeys(levels))
+                level_df = pd.DataFrame(
+                    levels,
+                    columns=["Code", "Label"]
+                )
 
-    if levels:
-        for code, label in levels:
-            st.write(f"**{code}** : {label}")
+                st.dataframe(
+                    level_df,
+                    hide_index=True,
+                    use_container_width=True
+                )
 
-            # ---------------------
-            # VARIABLES
-            # ---------------------
-            var_names = mgroup["Var_name"].dropna().unique()
+        # ---------------------
+        # VARIABLES
+        # ---------------------
+        var_names = mgroup["Var_name"].dropna().unique()
 
-            if len(var_names) > 0:
-                with st.expander("Show variable names"):
-                    for v in var_names:
-                        st.write(f"- {v}")
+        if len(var_names) > 0:
+            with st.expander("Show variable names"):
+                for v in var_names:
+                    st.write(f"- {v}")
+
