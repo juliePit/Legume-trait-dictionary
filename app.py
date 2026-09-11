@@ -199,7 +199,9 @@ for trait, group in grouped:
                 scale_class = str(
                     scale_class_series.iloc[0]
                 ).strip().lower()
-               
+                   
+                st.write("Available columns:")
+                st.write(list(mgroup.columns))
                 if scale_class in ["ordinal", "nominal"]:
                     # display levels
     
