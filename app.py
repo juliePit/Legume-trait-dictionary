@@ -1,6 +1,34 @@
 import streamlit as st
 import pandas as pd
 
+
+# -----------------------------
+# CUSTOM THEME
+# -----------------------------
+st.markdown("""
+<style>
+
+:root {
+    --ti-green: #6DA544;
+    --ti-dark-green: #3F6B35;
+    --ti-orange: #F39200;
+    --ti-light-green: #DCECC8;
+}
+
+h1, h2, h3 {
+    color: var(--ti-dark-green);
+}
+
+.stButton > button {
+    background-color: var(--ti-green);
+    color: white;
+    border-radius: 5px;
+}
+
+</style>
+""", unsafe_allow_html=True)
+
+
 # -----------------------------
 # CONFIG
 # -----------------------------
