@@ -42,8 +42,13 @@ st.sidebar.header("Filters")
 search = st.sidebar.text_input("Search trait")
 
 category_filter = st.sidebar.selectbox(
-    "Category",
+    "Trait Class",
     ["All"] + sorted(df["Class"].dropna().unique().tolist())
+)
+
+biology_filter = st.sidebar.selectbox(
+"Trait Category",
+["All"] + sorted(df["Biology Sub-classs"].dropna().unique().tolist())
 )
 
 species_filter = st.sidebar.selectbox(
@@ -68,7 +73,11 @@ if category_filter != "All":
     filtered_df = filtered_df[
         filtered_df["Class"] == category_filter
     ]
-
+# Biology subclass filter
+if biology_filter != "All":
+    filtered_df = filtered_df[
+        filtered_df["Biology Sub-classs"] == biology_filter
+    ]
 # ✅ NEW: Species filter
 if species_filter != "All":
     filtered_df = filtered_df[
