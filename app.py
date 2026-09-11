@@ -151,7 +151,7 @@ for trait, group in grouped:
     # -------------------------
     st.subheader("Methods")
 
-    method_groups = group.groupby("Methode name")
+    method_groups = group.groupby("Method name")
 
     for method, mgroup in method_groups:
 
