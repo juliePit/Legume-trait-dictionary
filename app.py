@@ -200,7 +200,7 @@ for trait, group in grouped:
                     scale_class_series.iloc[0]
                 ).strip().lower()
                 st.write("Scale class:", scale_class)
-                st.write(f"Scale class: {scale_class.iloc[0]}")
+                st.write(f"Scale class: {scale_class}")                
                 st.write("Available columns:")
                 st.write(list(mgroup.columns))
                 if scale_class in ["ordinal", "nominal"]:
