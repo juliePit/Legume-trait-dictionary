@@ -159,63 +159,79 @@ for trait, group in grouped:
     # METHODS
     # -------------------------
     st.subheader("Methods")
-
+    
     method_groups = group.groupby("Method name")
-
+    
     for method, mgroup in method_groups:
-
+    
         with st.expander(f"📘 {method}"):
-
+    
             # Method description
             m_desc_series = mgroup["Method description"].dropna()
-            m_description = m_desc_series.iloc[0] if not m_desc_series.empty else "No description available."
-
+            m_description = (
+                m_desc_series.iloc[0]
+                if not m_desc_series.empty
+                else "No description available."
+            )
+    
             st.write("**Description**")
             st.write(m_description)
-
+    
             # ---------------------
             # SCALES
             # ---------------------
             scales = mgroup["Scale name"].dropna().unique()
-
+    
             if len(scales) > 0:
                 st.write("**Available scales:**")
                 for s in scales:
                     st.write(f"- {s}")
             else:
                 st.write("No scale specified")
-                if not scale_class.empty and scale_class.iloc[0] in ["Ordinal", "Nominal"]:
-
-    scale_rows = []
-
-    row = mgroup.iloc[0]
-
-    for i in range(1, 10):
-        code_col = f"Level {i} code"
-        label_col = f"Level {i} label"
-
-        if (
-            pd.notna(row.get(code_col))
-            and pd.notna(row.get(label_col))
-        ):
-            scale_rows.append({
-                "Code": row[code_col],
-                "Meaning": row[label_col]
-            })
-
-    if scale_rows:
-        st.write("**Scale details**")
-        st.dataframe(
-            pd.DataFrame(scale_rows),
-            hide_index=True,
-            use_container_width=True
-        )
-
+    
+            # ---------------------
+            # SCALE DETAILS
+            # ---------------------
+            scale_class = mgroup["scale class"].dropna()
+    
+            if (
+                not scale_class.empty
+                and scale_class.iloc[0] in ["Ordinal", "Nominal"]
+            ):
+    
+                scale_rows = []
+    
+                row = mgroup.iloc[0]
+    
+                for i in range(1, 10):
+    
+                    code_col = f"Level {i} code"
+                    label_col = f"Level {i} label"
+    
+                    if (
+                        pd.notna(row.get(code_col))
+                        and pd.notna(row.get(label_col))
+                    ):
+                        scale_rows.append(
+                            {
+                                "Code": row[code_col],
+                                "Meaning": row[label_col],
+                            }
+                        )
+    
+                if scale_rows:
+                    st.write("**Scale details**")
+                    st.dataframe(
+                        pd.DataFrame(scale_rows),
+                        hide_index=True,
+                        use_container_width=True,
+                    )
+    
             # ---------------------
             # VARIABLES
             # ---------------------
             var_names = mgroup["Var_name"].dropna().unique()
-
+    
             if len(var_names) > 0:
                 with st.expander("Show variable names"):
                     for v in var_names:
