@@ -192,48 +192,51 @@ for trait, group in grouped:
             # ---------------------
             # SCALE DETAILS
             # ---------------------
-            scale_class = mgroup["scale class"].dropna()
-            scale_class = str(mgroup["scale class"].dropna().iloc[0]).strip().lower()
+            scale_class_series = mgroup["scale class"].dropna()
 
-            if (
-                not scale_class.empty
-                and scale_class.iloc[0] in ["Ordinal", "Nominal"]
-            ):
+            if not scale_class_series.empty:
+            
+                scale_class = str(
+                    scale_class_series.iloc[0]
+                ).strip().lower()
+            
+                if scale_class in ["ordinal", "nominal"]:
+                    # display levels
     
-                scale_rows = []
-    
-                row = mgroup.iloc[0]
-    
-                for i in range(1, 10):
-    
-                    code_col = f"Level {i} code"
-                    label_col = f"Level {i} label"
-    
-                    if (
-                        pd.notna(row.get(code_col))
-                        and pd.notna(row.get(label_col))
-                    ):
-                        scale_rows.append(
-                            {
-                                "Code": row[code_col],
-                                "Meaning": row[label_col],
-                            }
+                    scale_rows = []
+        
+                    row = mgroup.iloc[0]
+        
+                    for i in range(1, 10):
+        
+                        code_col = f"Level {i} code"
+                        label_col = f"Level {i} label"
+        
+                        if (
+                            pd.notna(row.get(code_col))
+                            and pd.notna(row.get(label_col))
+                        ):
+                            scale_rows.append(
+                                {
+                                    "Code": row[code_col],
+                                    "Meaning": row[label_col],
+                                }
+                            )
+        
+                    if scale_rows:
+                        st.write("**Scale details**")
+                        st.dataframe(
+                            pd.DataFrame(scale_rows),
+                            hide_index=True,
+                            use_container_width=True,
                         )
-    
-                if scale_rows:
-                    st.write("**Scale details**")
-                    st.dataframe(
-                        pd.DataFrame(scale_rows),
-                        hide_index=True,
-                        use_container_width=True,
-                    )
-    
-            # ---------------------
-            # VARIABLES
-            # ---------------------
-            var_names = mgroup["Var_name"].dropna().unique()
-    
-            if len(var_names) > 0:
-                with st.expander("Show variable names"):
-                    for v in var_names:
-                        st.write(f"- {v}")
+        
+                # ---------------------
+                # VARIABLES
+                # ---------------------
+                var_names = mgroup["Var_name"].dropna().unique()
+        
+                if len(var_names) > 0:
+                    with st.expander("Show variable names"):
+                        for v in var_names:
+                            st.write(f"- {v}")
