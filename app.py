@@ -193,7 +193,8 @@ for trait, group in grouped:
             # SCALE DETAILS
             # ---------------------
             scale_class = mgroup["scale class"].dropna()
-    
+            scale_class = str(mgroup["scale class"].dropna().iloc[0]).strip().lower()
+
             if (
                 not scale_class.empty
                 and scale_class.iloc[0] in ["Ordinal", "Nominal"]
