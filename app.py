@@ -18,11 +18,12 @@ with col1:
 with col2:
     import subprocess
     
-    date = subprocess.check_output(
+    date_str  = subprocess.check_output(
         ["git", "log", "-1", "--format=%cd", "--", "Classeur1.xlsx"]
     ).decode("utf-8").strip()
-    update_date = datetime.fromtimestamp(date).strftime("%d/%m/%Y")
-    st.write(f"Last update: {update_date}")
+    date = datetime.fromisoformat(date_str)
+    formatted_date = date.strftime("%d/%m/%Y")
+    st.write(f"Last update: {formatted_date}")
 
 # -----------------------------
 # LOAD DATA
