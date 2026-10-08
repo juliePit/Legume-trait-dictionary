@@ -16,6 +16,7 @@ with col1:
     st.title("🫛 Legume Trait Dictionary")
 
 with col2:
+    from datetime import datetime
     import subprocess
     
     date_str  = subprocess.check_output(
