@@ -22,7 +22,7 @@ with col2:
     date_str  = subprocess.check_output(
         ["git", "log", "-1", "--format=%cd", "--", "Classeur1.xlsx"]
     ).decode("utf-8").strip()
-    date = datetime.fromisoformat(date_str)
+    date = datetime.strptime(date_str, "%Y-%m-%d %H:%M:%S %z")
     formatted_date = date.strftime("%d/%m/%Y")
     st.write(f"Last update: {formatted_date}")
 
