@@ -16,14 +16,13 @@ with col1:
     st.title("🫛 Legume Trait Dictionary")
 
 with col2:
-    update_time = os.path.getmtime("Classeur1.xlsx")
-    update_date = datetime.fromtimestamp(update_time).strftime("%d/%m/%Y")
-    st.markdown(
-        f"<div style='text-align:right;'>"
-        f"<small>Last update<br>{update_date}</small>"
-        f"</div>",
-        unsafe_allow_html=True
-    )
+import subprocess
+
+date = subprocess.check_output(
+    ["git", "log", "-1", "--format=%cd", "--", "Classeur1.xlsx"]
+).decode("utf-8").strip()
+
+st.write(f"Last update: {date}")
 
 # -----------------------------
 # LOAD DATA
