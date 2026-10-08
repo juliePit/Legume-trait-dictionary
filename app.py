@@ -21,8 +21,8 @@ with col2:
     date = subprocess.check_output(
         ["git", "log", "-1", "--format=%cd", "--", "Classeur1.xlsx"]
     ).decode("utf-8").strip()
-    
-    st.write(f"Last update: {date}")
+    update_date = datetime.fromtimestamp(date).strftime("%d/%m/%Y")
+    st.write(f"Last update: {update_date}")
 
 # -----------------------------
 # LOAD DATA
