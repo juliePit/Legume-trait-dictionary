@@ -7,7 +7,23 @@ import pandas as pd
 # CONFIG
 # -----------------------------
 st.set_page_config(page_title="Trait Dictionary", layout="wide")
-st.title("🫛 Legume Trait Dictionary")
+from datetime import datetime
+import os
+
+col1, col2 = st.columns([4, 1])
+
+with col1:
+    st.title("🫛 Legume Trait Dictionary")
+
+with col2:
+    update_time = os.path.getmtime("Classeur1.xlsx")
+    update_date = datetime.fromtimestamp(update_time).strftime("%d/%m/%Y")
+    st.markdown(
+        f"<div style='text-align:right;'>"
+        f"<small>Last update<br>{update_date}</small>"
+        f"</div>",
+        unsafe_allow_html=True
+    )
 
 # -----------------------------
 # LOAD DATA
